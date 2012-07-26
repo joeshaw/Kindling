@@ -29,10 +29,10 @@ kindling.module(function () {
 				type: 'notification',
 				value: {
 					username: username,
-					room: $('#room_name').html(),
+					room: $('#room_name').text(),
 					author: $author.text() || $author.data('short-name'),
 					avatar: $author.data('avatar'),
-					message: $body.html()
+					message: $body.text()
 				}
 			});
 		}

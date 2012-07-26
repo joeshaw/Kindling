@@ -2,6 +2,7 @@ kindling.module(function () {
 	'use strict';
 
 	var tabMap = {};
+	var notifications = [];
 
 	function initSetting(setting, defaultValue) {
 		localStorage[setting] = localStorage[setting] || defaultValue;
@@ -44,6 +45,7 @@ kindling.module(function () {
 	}
 
 	function showNotification(payload, sender) {
+		/*
 		var notification = webkitNotifications.createHTMLNotification('notification.html'
 			+ '?room=' + encodeURIComponent(payload.room)
 			+ '&author=' + encodeURIComponent(payload.author)
@@ -51,12 +53,24 @@ kindling.module(function () {
 			+ '&user=' + encodeURIComponent(payload.username)
 			+ '&baseUrl=' + encodeURIComponent(kindling.getDomain(sender.tab.url))
 			+ '#' + payload.message);
+		*/
+
+		var notification = webkitNotifications.createNotification(
+            payload.avatar,
+            payload.room + " - " + payload.author,
+            payload.message);
 
 		notification.onclick = function () {
-			chrome.windows.update(tabMap[sender.tab.id], { focused: true });
+			//chrome.windows.update(tabMap[sender.tab.id], { focused: true });
 			chrome.tabs.update(sender.tab.id, { selected: true });
+
+			for (var i = 0; i < notifications.length; i++) {
+				notifications[i].cancel();
+			}
+			notifications = [];
 		};
 
+		notifications.push(notification);
 		notification.show();
 	}
 
